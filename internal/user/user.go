@@ -4,11 +4,14 @@ import (
 	"context"
 	"net/http"
 
-	v "github.com/core-go/core/v10"
 	"go.mongodb.org/mongo-driver/mongo"
 
+	v "github.com/core-go/core/v10"
+	"github.com/core-go/mongo/adapter"
+	"github.com/core-go/search"
+
 	"go-service/internal/user/handler"
-	"go-service/internal/user/repository/adapter"
+	"go-service/internal/user/model"
 	"go-service/internal/user/repository/query"
 	"go-service/internal/user/service"
 )
@@ -29,7 +32,8 @@ func NewUserHandler(db *mongo.Database, logError func(context.Context, string, .
 		return nil, err
 	}
 
-	userRepository := adapter.NewUserAdapter(db, query.BuildQuery)
+	// userRepository := adapter.NewUserAdapter(db, query.BuildQuery)
+	userRepository := adapter.NewSearchAdapter[model.User, string, *model.UserFilter](db, "users", query.BuildQuery, search.GetSort)
 	userService := service.NewUserUseCase(userRepository)
 	userHandler := handler.NewUserHandler(userService, validator.Validate, logError)
 	return userHandler, nil
