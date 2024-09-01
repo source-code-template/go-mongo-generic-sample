@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/core-go/config"
-	srv "github.com/core-go/core/server"
+	svr "github.com/core-go/core/server"
+	mid "github.com/core-go/log/middleware"
 	"github.com/core-go/log/zap"
-	mid "github.com/core-go/middleware"
 	"github.com/gorilla/mux"
 
 	"go-service/internal/app"
@@ -33,8 +33,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	log.Info(ctx, srv.ServerInfo(cfg.Server))
-	server := srv.CreateServer(cfg.Server, r)
+	log.Info(ctx, svr.ServerInfo(cfg.Server))
+	server := svr.CreateServer(cfg.Server, r)
 	if err = server.ListenAndServe(); err != nil {
 		log.Error(ctx, err.Error())
 	}
