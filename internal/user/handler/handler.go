@@ -17,7 +17,7 @@ import (
 
 const InternalServerError = "Internal Server Error"
 
-func NewUserHandler(service service.UserService, validate func(context.Context, interface{}) ([]core.ErrorMessage, error), logError func(context.Context, string, ...map[string]interface{})) *UserHandler {
+func NewUserHandler(service service.UserService, validate func(context.Context, *model.User) ([]core.ErrorMessage, error), logError func(context.Context, string, ...map[string]interface{})) *UserHandler {
 	userType := reflect.TypeOf(model.User{})
 	_, jsonMap, _ := core.BuildMapField(userType)
 	filterType := reflect.TypeOf(model.UserFilter{})
@@ -27,7 +27,7 @@ func NewUserHandler(service service.UserService, validate func(context.Context, 
 
 type UserHandler struct {
 	service     service.UserService
-	Validate    func(context.Context, interface{}) ([]core.ErrorMessage, error)
+	Validate    func(context.Context, *model.User) ([]core.ErrorMessage, error)
 	LogError    func(context.Context, string, ...map[string]interface{})
 	jsonMap     map[string]int
 	paramIndex  map[string]int

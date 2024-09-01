@@ -6,8 +6,8 @@ import (
 
 	"go.mongodb.org/mongo-driver/mongo"
 
-	v "github.com/core-go/core/v10"
-	"github.com/core-go/mongo/adapter"
+	v "github.com/core-go/core/validator"
+	repo "github.com/core-go/mongo/repository"
 	"github.com/core-go/search"
 
 	"go-service/internal/user/handler"
@@ -27,13 +27,13 @@ type UserTransport interface {
 }
 
 func NewUserHandler(db *mongo.Database, logError func(context.Context, string, ...map[string]interface{})) (UserTransport, error) {
-	validator, err := v.NewValidator()
+	validator, err := v.NewValidator[*model.User]()
 	if err != nil {
 		return nil, err
 	}
 
 	// userRepository := adapter.NewUserAdapter(db, query.BuildQuery)
-	userRepository := adapter.NewSearchAdapter[model.User, string, *model.UserFilter](db, "users", query.BuildQuery, search.GetSort)
+	userRepository := repo.NewSearchRepository[model.User, string, *model.UserFilter](db, "users", query.BuildQuery, search.GetSort)
 	userService := service.NewUserUseCase(userRepository)
 	userHandler := handler.NewUserHandler(userService, validator.Validate, logError)
 	return userHandler, nil
