@@ -10,12 +10,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 
 	mgo "github.com/core-go/mongo"
+
 	"go-service/internal/user/model"
 )
 
 func NewUserAdapter(db *mongo.Database, buildQuery func(*model.UserFilter) (bson.D, bson.M)) *UserAdapter {
-	userType := reflect.TypeOf(model.User{})
-	bsonMap := mgo.MakeBsonMap(userType)
+	bsonMap := mgo.MakeBsonMap(reflect.TypeOf(model.User{}))
 	return &UserAdapter{Collection: db.Collection("users"), Map: bsonMap, BuildQuery: buildQuery}
 }
 
@@ -55,8 +55,8 @@ func (r *UserAdapter) Patch(ctx context.Context, user map[string]interface{}) (i
 	if !ok {
 		return -1, errors.New("id must be in map[string]interface{} for patch")
 	}
-	bsonObj := mgo.MapToBson(user, r.Map)
-	return mgo.PatchOne(ctx, r.Collection, id, bsonObj)
+	bsonUser := mgo.MapToBson(user, r.Map)
+	return mgo.PatchOne(ctx, r.Collection, id, bsonUser)
 }
 
 func (r *UserAdapter) Delete(ctx context.Context, id string) (int64, error) {
