@@ -32,7 +32,7 @@ func BuildQuery(filter *model.UserFilter) (bson.D, bson.M) {
 	if len(filter.Username) > 0 {
 		query = append(query, bson.E{Key: "username", Value: primitive.Regex{Pattern: fmt.Sprintf("^%v", filter.Username), Options: "i"}})
 	}
-	if len(filter.Email) > 0 {
+	if filter.Email != nil && len(*filter.Email) > 0 {
 		query = append(query, bson.E{Key: "email", Value: primitive.Regex{Pattern: fmt.Sprintf("^%v", filter.Email), Options: "i"}})
 	}
 	if len(filter.Phone) > 0 {

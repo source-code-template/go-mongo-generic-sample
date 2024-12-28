@@ -32,7 +32,7 @@ func NewUserHandler(db *mongo.Database, logError core.Log, action *core.ActionCo
 	}
 
 	// userRepository := adapter.NewUserAdapter(db, query.BuildQuery)
-	userRepository := repo.NewSearchRepository[model.User, string, *model.UserFilter](db, "users", query.BuildQuery, search.GetSort)
+	userRepository := repo.NewSearchRepositoryWithVersion[model.User, string, *model.UserFilter](db, "users", query.BuildQuery, search.GetSort, "Version")
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService, logError, validator.Validate, action)
 	return userHandler, nil
