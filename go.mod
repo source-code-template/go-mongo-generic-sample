@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/core-go/config v1.0.6
-	github.com/core-go/core v1.2.9
+	github.com/core-go/core v1.3.2
 	github.com/core-go/health v1.2.1
 	github.com/core-go/log v1.0.9
 	github.com/core-go/mongo v1.1.2
@@ -44,9 +44,9 @@ require (
 	golang.org/x/crypto v0.23.0 // indirect
 	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
 	golang.org/x/net v0.25.0 // indirect
-	golang.org/x/sync v0.10.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/sync v0.11.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
+	golang.org/x/text v0.22.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

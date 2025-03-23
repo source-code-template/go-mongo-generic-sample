@@ -25,7 +25,7 @@ type UserTransport interface {
 	Delete(w http.ResponseWriter, r *http.Request)
 }
 
-func NewUserHandler(db *mongo.Database, logError core.Log, action *core.ActionConfig) (UserTransport, error) {
+func NewUserHandler(db *mongo.Database, logError core.Log) (UserTransport, error) {
 	validator, err := v.NewValidator[*model.User]()
 	if err != nil {
 		return nil, err
@@ -34,6 +34,6 @@ func NewUserHandler(db *mongo.Database, logError core.Log, action *core.ActionCo
 	// userRepository := adapter.NewUserAdapter(db, query.BuildQuery)
 	userRepository := repo.NewSearchRepository[model.User, string, *model.UserFilter](db, "users", query.BuildQuery, search.GetSort)
 	userService := service.NewUserService(userRepository)
-	userHandler := handler.NewUserHandler(userService, logError, validator.Validate, action)
+	userHandler := handler.NewUserHandler(userService, logError, validator.Validate)
 	return userHandler, nil
 }
