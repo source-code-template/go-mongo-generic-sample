@@ -1,21 +1,20 @@
-# Stage 1: Builder
-FROM golang:1.21-alpine AS builder
-
-RUN apk add --no-cache git gcc g++ musl-dev
+# --- Build stage ---
+FROM golang:1.21 AS builder
 
 WORKDIR /app
+
+COPY go.mod go.sum ./
+RUN go mod download
+
 COPY . .
+RUN go build -o server .
 
-RUN go mod tidy && go build -o main .
-
-# Stage 2: Runtime
-FROM alpine:latest
+# --- Final stage: use distroless image with compatible GLIBC ---
+FROM gcr.io/distroless/base-debian12
 
 WORKDIR /app
-
-# Copy app binary and config
-COPY --from=builder /app/main .
+COPY --from=builder /app/server .
 COPY --from=builder /app/configs ./configs
 
-EXPOSE 8080
-CMD ["./main"]
+# Distroless doesn't include a shell, so CMD must be executable
+CMD ["/app/server"]

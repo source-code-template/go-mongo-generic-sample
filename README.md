@@ -5,6 +5,24 @@
 go run main.go
 ```
 
+## Docker
+
+### Build the Docker Image
+
+```shell
+docker build -t go-mongo-generic-sample .
+```
+
+### Test the Docker Image
+
+```shell
+docker run -p 8080:8080 go-mongo-generic-sample
+```
+
+```shell
+docker run -p 8080:8080 -e MONGO_URI="mongodb+srv://dbUser:Demoaccount1@projectdemo.g0lah.mongodb.net" -e MONGO_DATABASE="masterdata" go-mongo-generic-sample
+```
+
 ## Architecture
 ### Simple Layer Architecture
 ![Layer Architecture](https://cdn-images-1.medium.com/max/800/1*JDYTlK00yg0IlUjZ9-sp7Q.png)
